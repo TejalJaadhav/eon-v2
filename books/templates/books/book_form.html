@@ -1,0 +1,15 @@
+{% extends "books/base.html" %}
+
+{% block title %}Add Book - Eon{% endblock %}
+
+{% block content %}
+    <h2>Add Books</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Save Book</button>
+    </form>
+{% endblock %}

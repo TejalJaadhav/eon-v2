@@ -1,0 +1,267 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f6f4ef;
+    color: #1f2933;
+}
+
+header {
+    padding: 24px 40px;
+    background: #f9f5f5;
+    border-bottom: 1px solid #e5e0d8;
+}
+
+header h1 {
+    margin: 0 0 12px;
+}
+
+nav a {
+    margin-right: 16px;
+    color: #334155;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 960px;
+    margin: 32px auto;
+    padding: 0 24px;
+}
+
+section {
+    margin: 24px 0;
+    padding: 20px 24px;
+    background: #ffffff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+}
+
+section h3 {
+    margin-top: 0;
+}
+
+ul {
+    margin-bottom: 0;
+}
+
+li {
+    margin: 8px 0;
+}
+
+a {
+    color: #5b3cc4;
+}
+
+a:hover {
+    color: #3f2a8a;
+}
+
+nav {
+    display: flex;
+    gap: 12px;
+}
+
+nav a {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: #334155;
+    background: #f3f0e8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav a:hover {
+    background: #e8e1d4;
+    text-decoration: none;
+}
+
+section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+section li {
+    padding: 10px 0;
+    border-top: 1px solid #eee8dd;
+}
+
+section li:first-child {
+    border-top: 0;
+}
+
+section li a {
+    color: #1f2933;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+section li a:hover {
+    color: #5b3cc4;
+    text-decoration: underline;
+}
+
+form {
+    max-width: 560px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e0d8;
+    border-radius: 8px;
+}
+
+form p {
+    margin: 0 0 16px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #cfc7bb;
+    border-radius: 6px;
+    font: inherit;
+    background: #fffdf8;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: #1f2933;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #334155;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.actions a {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #f3f0e8;
+    color: #334155;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.actions a:hover {
+    background: #e8e1d4;
+}
+
+
+.delete-form {
+    max-width: 520px;
+}
+
+.delete-form a {
+    display: inline-block;
+    margin-left: 12px;
+    color: #334155;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.delete-form a:hover {
+    text-decoration: underline;
+}
+
+.danger-button {
+    background: #b42318;
+}
+
+.danger-button:hover {
+    background: #8f1d14;
+}
+
+.empty-state {
+    color: #6b7280;
+    font-style: italic;
+}
+
+.search-note {
+    color: #6b7280;
+}
+
+.search-note a {
+    margin-left: 8px;
+    font-weight: 700;
+}
+
+.search-input-wrap {
+    position: relative; /* Allows the icon button to sit inside this wrapper. */
+}
+
+.search-input-wrap input {
+    width: 100%; /* Makes the search input fill the wrapper. */
+    height: 56px; /* Makes the search bar tall like your example. */
+    padding: 0 62px 0 18px; /* Leaves space on the right for the icon. */
+    font-size: 20px; /* Makes the text larger. */
+}
+
+.search-icon-button {
+    position: absolute; /* Removes button from normal form layout. */
+    right: 12px; /* Places it inside the right corner. */
+    top: 50%; /* Moves it halfway down the input. */
+    transform: translateY(-50%); /* Centers it vertically. */
+    width: 34px; /* Gives the icon button size. */
+    height: 34px; /* Gives the icon button size. */
+    padding: 0; /* Removes inherited button padding. */
+    border: 0; /* Removes button border. */
+    background: transparent; /* Removes dark button background. */
+    color: #111827; /* Sets icon color. */
+    cursor: pointer; /* Makes it feel clickable. */
+}
+
+.search-icon-button:hover {
+    background: transparent; /* Keeps hover from becoming dark. */
+}
+
+.search-icon-button svg {
+    width: 22px; /* Makes the search icon bigger. */
+    height: 22px; /* Makes the search icon bigger. */
+    stroke: currentColor; /* Uses button color for icon stroke. */
+    stroke-width: 2.6; /* Makes icon line thicker. */
+    fill: none; /* Keeps icon as outline. */
+    stroke-linecap: round; /* Rounds line ends. */
+}
+
+.search-form {
+    display: flex; /* Lets the search input and status dropdown stack neatly. */
+    flex-direction: column; /* Places search first, status second. */
+    gap: 14px; /* Creates space between search/author input and status dropdown. */
+}
+
+.search-form input,
+.search-form select {
+    width: 100%; /* Makes both controls the same width. */
+    height: 44px; /* Makes both controls smaller but still easy to click. */
+    box-sizing: border-box; /* Keeps padding inside the width and height. */
+    font-size: 16px; /* Keeps text proportional to the smaller field. */
+}
+

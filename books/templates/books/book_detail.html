@@ -1,0 +1,41 @@
+{% extends "books/base.html" %}
+
+{% block title %}{{ book.title }} - Eon{% endblock %}
+
+{% block content %}
+    <h2>{{ book.title }}</h2>
+
+    {% if book.author %}
+        <p>by {{ book.author }}</p>
+    {% endif %}
+
+    <p>Status: {{ book.get_status_display }}</p>
+
+    {% if book.total_pages %}
+        <p>Progress: {{ book.current_page }} / {{ book.total_pages }} pages</p>
+        <p>{{ book.reading_progress_perc }}% complete</p>
+    {% endif %}
+
+    {% if book.display_rating %}
+        <p>Rating: {{ book.display_rating }} / 5</p>
+    {% endif %}
+
+    {% if book.started_at %}
+        <p>Started: {{ book.started_at }}</p>
+    {% endif %}
+
+    {% if book.finished_at %}
+        <p>Finished: {{ book.finished_at }}</p>
+    {% endif %}
+
+    {% if book.notes %}
+        <h3>Notes</h3>
+        <p>{{ book.notes }}</p>
+    {% endif %}
+
+    <p class="actions">
+        <a href="{% url 'books:book_update' book.pk %}">Edit Book</a>
+        <a href="{% url 'books:book_delete' book.pk %}">Delete Book</a>
+        <a href="{% url 'books:book_list' %}">Back to Books</a>
+    </p>
+{% endblock %}
