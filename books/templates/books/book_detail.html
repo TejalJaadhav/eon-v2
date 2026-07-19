@@ -33,6 +33,40 @@
         <p>{{ book.notes }}</p>
     {% endif %}
 
+
+    {# Show this section title on the book detail page. #}
+    <h3>Adaptations</h3>
+
+    <p>
+        <a href="{% url 'adaptations:adaptation_create' book.pk %}">
+            Add Adaptation
+        </a>
+    </p>
+
+    {% for adaptation in book.adaptations.all %}
+
+        <p>
+            <strong>{{ adaptation.title }}</strong>
+
+            -  {{ adaptation.get_adaptation_type_display }}
+
+            {% if adaptation.release_year %}
+                ({{ adaptation.release_year }})
+            {% endif %}
+
+            -  {{ adaptation.get_watch_status_display }}
+
+            {% if adaptation.rating %}
+                - {{ adaptation.rating }}/5
+            {% endif %}
+        </p>
+
+    {% empty %}
+
+        <p>No adaptations added yet.</p>
+
+    {% endfor %}
+
     <p class="actions">
         <a href="{% url 'books:book_update' book.pk %}">Edit Book</a>
         <a href="{% url 'books:book_delete' book.pk %}">Delete Book</a>

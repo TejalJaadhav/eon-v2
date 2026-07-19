@@ -1,0 +1,17 @@
+{% extends "books/base.html" %}
+
+{% block title %} Add Adaptation - <Eon>% endblock %</Eon>
+
+{% block content %}
+
+    <h2>Add Adaptation</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">
+            Save Adaptation
+        </button>
+    </form>
+{% endblock %}

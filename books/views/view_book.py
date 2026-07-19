@@ -13,23 +13,49 @@ class BookListView(ListView):
         context = super().get_context_data(**kwargs)
         
         books = context["books"]
+        query = self.request.GET.get("q", "").strip()
+        selected_status = self.request.GET.get("status", "").strip()
         
-        context["currently_reading"] = books.filter(
-            status=Book.CURRENTLY_READING
+        context["currently_reading"] = books.filter (
+            status = Book.CURRENTLY_READING
         )
         
-        context["want_to_read"] = books.filter(
-            status=Book.WANT_TO_READ
+        context["want_to_read"] = books.filter (
+            status = Book.WANT_TO_READ
         )
-        context["read_books"] = books.filter(
-            status=Book.READ
-        )
-        context["query"] = self.request.GET.get("q", "").strip()
         
-        context["status_choices"] = Book.STATUS_CHOICES # sends choices to temp
-        context["selected_status"] = self.request.GET.get("status", "").strip() # To remember selected status
+        context["read_books"] = books.filter (
+            status = Book.READ
+        )
+        
+        show_all_sections = not query and not selected_status
+        
+        context["show_currently_reading"] = (
+            show_all_sections
+            or 
+            selected_status == Book.CURRENTLY_READING
+            or (query and not selected_status and context["currently_reading"].exists())
+        )
+        
+        context["show_want_to_read"] = (
+            show_all_sections
+            or 
+            selected_status == Book.WANT_TO_READ
+            or (query and not selected_status and context["want_to_read"].exists())
+        )
+        
+        context["show_read_books"] = (
+            show_all_sections
+            or selected_status == Book.READ
+            or (query and not selected_status and context["read_books"].exists())
+        )
+        
+        context["query"] = query
+        context["status_choices"] = Book.STATUS_CHOICES
+        context["selected_status"] = selected_status
+        
         return context
-    
+        
     def get_queryset(self):
         queryset= super().get_queryset()
         query = self.request.GET.get("q", "").strip() # Get the search text from URL.

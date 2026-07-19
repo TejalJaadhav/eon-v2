@@ -41,7 +41,8 @@
         </p>
     {% endif %}
    
-    {% if selected_status == "currently_reading" or not selected_status and not query or not selected_status and query and currently_reading %}
+
+    {% if show_currently_reading %} 
         <section class="book-section">
             <h2>Currently Reading</h2>
             {% if currently_reading %}
@@ -59,7 +60,7 @@
         </section>
     {% endif %}
 
-    {% if selected_status == "want_to_read" or not selected_status and not query or not selected_status and query and want_to_read %}
+    {% if show_want_to_read %}
         <section class="book-section">
             <h2>Want to read</h2>
             {% if want_to_read %}
@@ -77,11 +78,11 @@
         </section>
     {% endif %}
 
-    {% if selected_status == "read" or not selected_status and not query or not selected_status and query and read  %}
+    {% if show_read_books %}
         <section class="book-section">
             <h2>Read</h2>
-            {% if Read %}
-                {% for book in read %}
+            {% if read_books %}
+                {% for book in read_books %}
                     <p>
                         <a href="{% url 'books:book_detail' book.pk %}">
                             <strong>{{ book.title }}</strong>
