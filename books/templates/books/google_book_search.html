@@ -1,0 +1,26 @@
+<h1>Google Book Search</h1>
+
+<form method="get">
+    <input type="text" name-"q" value="{{ query}} placeholder"="Search books">
+    <button type="submit">Search</button>
+</form>
+
+{% for book in results %}
+    <div>
+        <h2>{{ book.title }}</h2>
+        <p> {{ book.authors|join:", " }}</p>
+        <p> {{ book.page_count }} pages</p>
+        <p> {{ book.published_date }}</p>
+
+        {% if book.thumbnail %}
+
+            <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
+        {% endif %}
+    </div>
+
+{% empty %}
+    {% if query %} 
+        <p>No results found.</p>
+    {% endif %}
+{% endfor %}
+

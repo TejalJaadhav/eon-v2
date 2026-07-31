@@ -1,5 +1,6 @@
 from django.urls import path
 from books.views import BookListView, BookCreateView, BookDetailView, BookUpdateView, BookDeleteView
+from books.views.view_google_books import google_book_search
 
 app_name = "books"
 
@@ -9,4 +10,5 @@ urlpatterns = [
     path("books/<int:pk>/", BookDetailView.as_view(), name="book_detail"),
     path("books/<int:pk>/edit/", BookUpdateView.as_view(), name="book_update"),
     path("books/<int:pk>/delete/", BookDeleteView.as_view(), name="book_delete"),
+    path("books/google-search/", google_book_search, name="google_book_search"),
 ]

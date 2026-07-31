@@ -22,37 +22,55 @@ class Book(BaseModel):
     ]
     
     # Book info
+    
+    google_book_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        unique=True,
+    )
+    
     title = models.CharField(
         max_length=255,
         blank=False,
-        null=False
+        null=False,
     )
     
-    author = models.CharField (
+    author = models.CharField(
         max_length=255,
         blank=True,
-        null=True
+        null=True,
+    )
+    
+    cover_url = models.URLField(
+        max_length=500,
+        blank=True,
+    )
+    
+    published_date = models.CharField(
+        max_length=20,
+        blank=True,
     )
     
     # Book reading status
-    status = models.CharField (
+    status = models.CharField(
         max_length=30,
         choices=STATUS_CHOICES,
         default=WANT_TO_READ
     )
     
     # Reading progress
-    total_pages = models.PositiveIntegerField (
+    total_pages = models.PositiveIntegerField(
         null=True,
         blank=True
     )
     
-    current_page = models.PositiveIntegerField (
+    current_page = models.PositiveIntegerField(
         default=0
     )
     
     # Personal rating you wanna give.
-    rating = models.DecimalField (
+    rating = models.DecimalField(
         max_digits=2,
         decimal_places=1,
         null=True,
@@ -60,12 +78,19 @@ class Book(BaseModel):
     )
     
     # Notes for the book
-    notes = models.TextField (
+    notes = models.TextField(
         blank=True
     )
     
-    started_at = models.DateField(null=True, blank=True)
-    finished_at = models.DateField(null=True, blank=True)
+    started_at = models.DateField(
+        null=True, 
+        blank=True,
+    )
+    
+    finished_at = models.DateField(
+        null=True, 
+        blank=True,
+    )
     
     class Meta:
         # Default order
