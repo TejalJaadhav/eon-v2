@@ -5,8 +5,16 @@
 {% block content %}
     <h2>{{ book.title }}</h2>
 
+    {% if book.cover_url %}
+        <img src="{{ book.cover_url }}" alt="{{ book.title } cover}">
+    {% endif %}
+
     {% if book.author %}
         <p>by {{ book.author }}</p>
+    {% endif %}
+
+    {% if book.published_date %}
+        <p>Published: {{ book.published_date }}</p>
     {% endif %}
 
     <p>Status: {{ book.get_status_display }}</p>
