@@ -20,11 +20,14 @@
             <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
         {% endif %}
 
-        <p>
-            <a class="button" href="{% url 'books:import_google_book' book.google_book_id %}" >
+        {% if book.google_book_id in saved_google_book_ids %}
+            <p>Already in library</p>
+        {% else %}
+            <a class="button" href="{% url 'books:import_google_book' book.google_book_id %}">
                 Add to my library
             </a>
-        </p>
+        {% endif %}
+        
     </div>
 
 {% empty %}

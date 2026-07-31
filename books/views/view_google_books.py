@@ -28,9 +28,15 @@ def import_google_book(request, google_book_id):
 def google_book_search(request):
     query = request.GET.get("q", "").strip()
     results = []
-    
+    saved_google_book_ids = set()
     if query:
         results = search_google_books(query)
+        
+        saved_google_book_ids = set(
+            Book.objects.filter(
+                google_book_id__in = [book["google_book_id"] for book in results]
+            ).values_list("google_book_id", flat=True)
+        )
         
     return render(
         request,
@@ -38,7 +44,8 @@ def google_book_search(request):
         {
             "query": query,
             "results": results,
-        }
+            "saved_google_book_ids": saved_google_book_ids,
+        },
     )
     
 
