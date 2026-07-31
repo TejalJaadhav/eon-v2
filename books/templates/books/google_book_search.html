@@ -1,12 +1,16 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+
 <h1>Google Book Search</h1>
 
 <form method="get">
-    <input type="text" name-"q" value="{{ query}} placeholder"="Search books">
+    <input type="text" name-"q" value="{{ query}}"="Search books">
     <button type="submit">Search</button>
 </form>
 
 {% for book in results %}
-    <div>
+    <div class="book-card">
         <h2>{{ book.title }}</h2>
         <p> {{ book.authors|join:", " }}</p>
         <p> {{ book.page_count }} pages</p>
@@ -17,7 +21,7 @@
         {% endif %}
 
         <p>
-            <a href="{% url 'books:import_google_book' book.google_book_id %}" >
+            <a class="button" href="{% url 'books:import_google_book' book.google_book_id %}" >
                 Add to my library
             </a>
         </p>
@@ -28,4 +32,6 @@
         <p>No results found.</p>
     {% endif %}
 {% endfor %}
+
+{% endblock%}
 

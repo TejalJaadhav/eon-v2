@@ -23,7 +23,7 @@ def import_google_book(request, google_book_id):
         
        }
    )
-    return redirect("books:book_list") # Once saved, send the user back to their saved book list.
+    return redirect("books:book_detail", pk=book.pk) # Once saved, send the user back to their saved book list.
 
 def google_book_search(request):
     query = request.GET.get("q", "").strip()
