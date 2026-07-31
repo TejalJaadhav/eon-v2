@@ -13,9 +13,14 @@
         <p> {{ book.published_date }}</p>
 
         {% if book.thumbnail %}
-
             <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
         {% endif %}
+
+        <p>
+            <a href="{% url 'books:import_google_book' book.google_book_id %}" >
+                Add to my library
+            </a>
+        </p>
     </div>
 
 {% empty %}

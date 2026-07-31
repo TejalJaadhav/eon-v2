@@ -4,12 +4,16 @@ from django.conf import settings
 
 GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes"
 
-def search_google_books(query, max_result=10):
+def search_google_books(query, max_results=10):
+    """
+    Search Google Books and return a list of book results.
+    """
+    
     response = requests.get(
         GOOGLE_BOOKS_URL,
         params = {
-            "q": query,
-            "maxResults": max_result,
+            "q": query, # Search text type by the user.
+            "maxResults": max_results,
             "key": settings.GOOGLE_BOOKS_API_KEY,
         },
         timeout=10,
@@ -24,10 +28,15 @@ def search_google_books(query, max_result=10):
 
 
 def normalize_google_book_item(item):
+    """
+    To convert one google books item into clean format.
+    """
+    
     volume_info = item.get("volumeInfo", {})
     
     thumbnail = volume_info.get("imageLinks", {}).get("thumbnail", "")
     
+    # Converting to https so browser more likely to load the images.
     if thumbnail.startswith("http://"):
         thumbnail = thumbnail.replace("http://", "https://", 1)
     
@@ -41,3 +50,22 @@ def normalize_google_book_item(item):
     }
     
     return book_details_map
+
+
+def get_google_book_by_id(google_book_id):
+    """
+    To fetch one exact book from Google Books using its Google book ID.
+    """
+    
+    response = requests.get(
+        f"{GOOGLE_BOOKS_URL}/ {google_book_id}",
+        params={"key":settings.GOOGLE_BOOKS_API_KEY,},
+        timeout=10,
+    )
+    
+    response.raise_for_status()
+    item = response.json() # Converting google's json to py dict
+    
+    return normalize_google_book_item(item)
+    
+    
