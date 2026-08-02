@@ -9,13 +9,14 @@ def import_google_book(request, google_book_id):
     """
     
     google_book = get_google_book_by_id(google_book_id)
-    
+    selected_status = request.POST.get("status", Book.WANT_TO_READ)
     author_text = ", ".join(google_book["authors"])
     
     book, created = Book.objects.get_or_create(
        google_book_id = google_book["google_book_id"],
        defaults={
            "title": google_book["title"],
+           "status":selected_status,
            "author":author_text,
            "total_pages": google_book["page_count"],
            "published_date": google_book["published_date"],

@@ -23,9 +23,17 @@
         {% if book.google_book_id in saved_google_book_ids %}
             <p>Already in library</p>
         {% else %}
-            <a class="button" href="{% url 'books:import_google_book' book.google_book_id %}">
-                Add to my library
-            </a>
+            <form method="post" action="{% url 'books:import_google_book' book.google_book_id %}">
+                {% csrf_token %}
+
+                <select name="status">
+                    <option value="want_to_read">Want to read</option>
+                    <option value="currently_reading">Currently Reading</option>
+                    <option value="read">Read</option>
+                </select>
+
+                <button type="submit">Add to my library</button>
+            </form>
         {% endif %}
         
     </div>
