@@ -5,44 +5,48 @@
 <h1>Google Book Search</h1>
 
 <form method="get">
-    <input type="text" name-"q" value="{{ query}}"="Search books">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search books">
     <button type="submit">Search</button>
 </form>
 
 {% for book in results %}
-    <div class="book-card">
-        <h2>{{ book.title }}</h2>
-        <p> {{ book.authors|join:", " }}</p>
-        <p> {{ book.page_count }} pages</p>
-        <p> {{ book.published_date }}</p>
-
+    <div class="google-book-result">
+        <div class="google-book-cover-wrap">
         {% if book.thumbnail %}
-            <img src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
-        {% endif %}
-
-        {% if book.google_book_id in saved_google_book_ids %}
-            <p>Already in library</p>
+            <img class="google-book-cover" src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
         {% else %}
-            <form method="post" action="{% url 'books:import_google_book' book.google_book_id %}">
-                {% csrf_token %}
-
-                <select name="status">
-                    <option value="want_to_read">Want to read</option>
-                    <option value="currently_reading">Currently Reading</option>
-                    <option value="read">Read</option>
-                </select>
-
-                <button type="submit">Add to my library</button>
-            </form>
+            <div class="google-book-cover-placeholder">No cover</div>
         {% endif %}
-        
     </div>
 
+        <div class="google-book-info">
+            <h2>{{ book.title }}</h2>
+            <p>by {{ book.authors|join:", " }}</p>
+            
+            <p>{{ book.page_count }} pages - {{ book.published_date }}</p>
+
+            {% if book.google_book_id in saved_google_book_ids %}
+                <p class="book-status-note">Already in library</p>
+            {% else %}
+                <form method="post" action="{% url 'books:import_google_book' book.google_book_id %}">
+                    {% csrf_token %}
+
+                    <select name="status">
+                        <option value="want_to_read">Want to read</option>
+                        <option value="currently_reading">Currently Reading</option>
+                        <option value="read">Read</option>
+                    </select>
+
+                    <button type="submit">Add to my library</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% empty %}
     {% if query %} 
         <p>No results found.</p>
     {% endif %}
 {% endfor %}
 
-{% endblock%}
+{% endblock %}
 

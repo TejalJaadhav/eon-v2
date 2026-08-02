@@ -15,15 +15,24 @@ header h1 {
     margin: 0 0 12px;
 }
 
+nav {
+    display: flex;
+    gap: 12px;
+}
+
 nav a {
-    margin-right: 16px;
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 6px;
     color: #334155;
+    background: #f3f0e8;
     text-decoration: none;
     font-weight: 600;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    background: #e8e1d4;
+    text-decoration: none;
 }
 
 main {
@@ -58,26 +67,6 @@ a {
 
 a:hover {
     color: #3f2a8a;
-}
-
-nav {
-    display: flex;
-    gap: 12px;
-}
-
-nav a {
-    display: inline-block;
-    padding: 8px 12px;
-    border-radius: 6px;
-    color: #334155;
-    background: #f3f0e8;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-nav a:hover {
-    background: #e8e1d4;
-    text-decoration: none;
 }
 
 section ul {
@@ -174,7 +163,6 @@ button:hover {
     background: #e8e1d4;
 }
 
-
 .delete-form {
     max-width: 520px;
 }
@@ -214,54 +202,136 @@ button:hover {
 }
 
 .search-input-wrap {
-    position: relative; /* Allows the icon button to sit inside this wrapper. */
+    position: relative;
 }
 
 .search-input-wrap input {
-    width: 100%; /* Makes the search input fill the wrapper. */
-    height: 56px; /* Makes the search bar tall like your example. */
-    padding: 0 62px 0 18px; /* Leaves space on the right for the icon. */
-    font-size: 20px; /* Makes the text larger. */
+    width: 100%;
+    height: 56px;
+    padding: 0 62px 0 18px;
+    font-size: 20px;
 }
 
 .search-icon-button {
-    position: absolute; /* Removes button from normal form layout. */
-    right: 12px; /* Places it inside the right corner. */
-    top: 50%; /* Moves it halfway down the input. */
-    transform: translateY(-50%); /* Centers it vertically. */
-    width: 34px; /* Gives the icon button size. */
-    height: 34px; /* Gives the icon button size. */
-    padding: 0; /* Removes inherited button padding. */
-    border: 0; /* Removes button border. */
-    background: transparent; /* Removes dark button background. */
-    color: #111827; /* Sets icon color. */
-    cursor: pointer; /* Makes it feel clickable. */
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #111827;
+    cursor: pointer;
 }
 
 .search-icon-button:hover {
-    background: transparent; /* Keeps hover from becoming dark. */
+    background: transparent;
 }
 
 .search-icon-button svg {
-    width: 22px; /* Makes the search icon bigger. */
-    height: 22px; /* Makes the search icon bigger. */
-    stroke: currentColor; /* Uses button color for icon stroke. */
-    stroke-width: 2.6; /* Makes icon line thicker. */
-    fill: none; /* Keeps icon as outline. */
-    stroke-linecap: round; /* Rounds line ends. */
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    fill: none;
+    stroke-linecap: round;
 }
 
 .search-form {
-    display: flex; /* Lets the search input and status dropdown stack neatly. */
-    flex-direction: column; /* Places search first, status second. */
-    gap: 14px; /* Creates space between search/author input and status dropdown. */
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .search-form input,
 .search-form select {
-    width: 100%; /* Makes both controls the same width. */
-    height: 44px; /* Makes both controls smaller but still easy to click. */
-    box-sizing: border-box; /* Keeps padding inside the width and height. */
-    font-size: 16px; /* Keeps text proportional to the smaller field. */
+    width: 100%;
+    height: 44px;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
+.google-book-result {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: 16px 18px;
+    margin: 12px 0;
+    border-bottom: 1px solid #e2ddd5;
+    background: #ffffff;
+}
+
+.google-book-cover-wrap {
+    width: 90px;
+    min-height: 135px;
+}
+
+.google-book-cover {
+    width: 90px;
+    height: 135px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.google-book-cover-placeholder {
+    width: 90px;
+    height: 135px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f0e8;
+    color: #6b7280;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.google-book-info {
+    min-width: 0;
+}
+
+.google-book-info h2 {
+    margin: 0 0 6px;
+    font-size: 24px;
+}
+
+.google-book-info p {
+    margin: 6px 0;
+}
+
+.google-book-info form {
+    max-width: none;
+    padding: 0;
+    margin-top: 12px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.google-book-info select {
+    width: 180px;
+    height: 36px;
+    padding: 4px 8px;
+}
+
+.google-book-info button {
+    height: 36px;
+    padding: 6px 12px;
+    white-space: nowrap;
+}
+
+.book-status-note {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #eef6ef;
+    color: #2f6f3e;
+    font-weight: 600;
+}
