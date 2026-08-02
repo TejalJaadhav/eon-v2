@@ -48,6 +48,10 @@
             {% if currently_reading %}
                 {% for book in currently_reading %}
                     <p>
+                        {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                        {% endif %}
+
                         <a href="{% url 'books:book_detail' book.pk %}">
                             <strong>{{ book.title }}</strong>
                         </a>
@@ -66,6 +70,10 @@
             {% if want_to_read %}
                 {% for book in want_to_read %}
                     <p>
+                        {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                        {% endif %}
+
                         <a href="{% url 'books:book_detail' book.pk %}">
                             <strong>{{ book.title }}</strong>
                         </a>
@@ -84,6 +92,10 @@
             {% if read_books %}
                 {% for book in read_books %}
                     <p>
+                        {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                        {% endif %}
+                        
                         <a href="{% url 'books:book_detail' book.pk %}">
                             <strong>{{ book.title }}</strong>
                         </a>
