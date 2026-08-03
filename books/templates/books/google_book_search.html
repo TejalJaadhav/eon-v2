@@ -28,6 +28,10 @@
             {% if book.google_book_id in saved_google_book_ids %}
                 <p class="book-status-note">Already in library</p>
             {% else %}
+                {% if book.has_similar_saved_title %}
+                    <p class="book-status-note similar-book-note">Similar book in library</p>
+                {% endif %}
+                
                 <form method="post" action="{% url 'books:import_google_book' book.google_book_id %}">
                     {% csrf_token %}
 

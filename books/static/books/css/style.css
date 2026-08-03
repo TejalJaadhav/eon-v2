@@ -335,3 +335,8 @@ button:hover {
     color: #2f6f3e;
     font-weight: 600;
 }
+
+.similar-book-note {
+    background: #fff4d6;
+    color: #8a5a00;
+}
