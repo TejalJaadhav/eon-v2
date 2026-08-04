@@ -13,7 +13,12 @@
         <p>{{ book.page_count }} pages - {{ book.published_date }}</p>
 
         {% if book.google_book_id in saved_google_book_ids %}
-            <p class="book-status-note">Already in library</p>
+            <p class="book-status-note">
+                Already in library
+                {% if book.saved_book %}
+                    · <a href="{% url 'books:book_detail' book.saved_book.pk %}">View book</a>
+                {% endif %}
+            </p>
         {% else %}
             {% if book.has_similar_saved_title %}
                 <p class="book-status-note similar-book-note">Similar book in library</p>

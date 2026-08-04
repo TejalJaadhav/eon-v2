@@ -47,16 +47,22 @@
             <h2>Currently Reading</h2>
             {% if currently_reading %}
                 {% for book in currently_reading %}
-                    <p>
+                    <div class="saved-book-row">
                         {% if book.cover_url %}
-                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                            <img class="saved-book-cover" src="{{ book.cover_url }}" alt="{{ book.title }} cover">
+                        {% else %}
+                            <div class="saved-book-cover-placeholder">No cover</div>
                         {% endif %}
 
-                        <a href="{% url 'books:book_detail' book.pk %}">
-                            <strong>{{ book.title }}</strong>
-                        </a>
-                        by {{ book.author }} - {{ book.reading_progress_perc }}%
-                    </p>
+                        <div class="saved-book-info">
+                            <a href="{% url 'books:book_detail' book.pk %}">
+                                <strong>{{ book.title }}</strong>
+                            </a>
+
+                            <p>by {{ book.author }}</p>
+                            <p>{{ book.reading_progress_perc }}% complete</p>
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
                     <p class="empty-state">No current reads.</p>
@@ -69,16 +75,22 @@
             <h2>Want to read</h2>
             {% if want_to_read %}
                 {% for book in want_to_read %}
-                    <p>
+                    <div class="saved-book-row">
                         {% if book.cover_url %}
-                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                            <img class="saved-book-cover" src="{{ book.cover_url }}" alt="{{ book.title }} cover">
+                        {% else %}
+                            <div class="saved-book-cover-placeholder">No cover</div>
                         {% endif %}
 
-                        <a href="{% url 'books:book_detail' book.pk %}">
-                            <strong>{{ book.title }}</strong>
-                        </a>
-                        by {{ book.author }} - {{ book.reading_progress_perc }}%
-                    </p>
+                        <div class="saved-book-info">
+                            <a href="{% url 'books:book_detail' book.pk %}">
+                                <strong>{{ book.title }}</strong>
+                            </a>
+
+                            <p>by {{ book.author }}</p>
+                            <p>{{ book.reading_progress_perc }}% complete</p>
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
                     <p class="empty-state">No want to reads.</p>
@@ -91,16 +103,22 @@
             <h2>Read</h2>
             {% if read_books %}
                 {% for book in read_books %}
-                    <p>
+                    <div class="saved-book-row">
                         {% if book.cover_url %}
-                            <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="45">
+                            <img class="saved-book-cover" src="{{ book.cover_url }}" alt="{{ book.title }} cover">
+                        {% else %}
+                            <div class="saved-book-cover-placeholder">No cover</div>
                         {% endif %}
-                        
-                        <a href="{% url 'books:book_detail' book.pk %}">
-                            <strong>{{ book.title }}</strong>
-                        </a>
-                        by {{ book.author }} - {{ book.reading_progress_perc }}%
-                    </p>
+
+                        <div class="saved-book-info">
+                            <a href="{% url 'books:book_detail' book.pk %}">
+                                <strong>{{ book.title }}</strong>
+                            </a>
+
+                            <p>by {{ book.author }}</p>
+                            <p>{{ book.reading_progress_perc }}% complete</p>
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
                     <p class="empty-state">No Read</p>
@@ -110,16 +128,18 @@
 
 
     {% if google_results %}
-        <section class="book-section">
+        <section class="google-results-section">
             <h2>Google Books results</h2>
-            <p class="search-note">
-                No saved books matched "{{ query }}". You can add from Google Books.
+            {% if not books %}
+            <p class="helper-note">
+                No saved books matched "{{ query }}", but you can add one from Google Books.
             </p>
+        {% endif %}
 
-            {% for book in google_results %}
-                {% include "books/partials/google_book_result.html" %}
-            {% endfor %}
-        </section>
-    {% endif %}
+        {% for book in google_results %}
+            {% include "books/partials/google_book_result.html" %}
+        {% endfor %}
+    </section>
+{% endif %}
 
 {% endblock %}
