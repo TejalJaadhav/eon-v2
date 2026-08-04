@@ -2,6 +2,9 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 from django.db.models import Q
 
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+
 from books.models import Book
 from books.forms import BookForm
 from books.services.google_books import search_google_books
@@ -101,3 +104,30 @@ class BookDeleteView(DeleteView):
     model = Book
     template_name = "books/book_delete.html"
     success_url = reverse_lazy("books:book_list")
+    
+    
+@require_POST
+def update_book_status(request, pk):
+    """
+    Updates one saved book's reading status from the detail page.
+    """
+    
+    book = get_object_or_404(Book, pk=pk)
+    new_status = request.POST.get("status")
+    
+    valid_statuses = [value for value, label in Book.STATUS_CHOICES]
+    
+    if new_status in valid_statuses:
+        book.status = new_status
+        
+        if new_status == Book.READ and book.total_pages:
+            book.current_page = book.total_pages
+            
+        if new_status == Book.CURRENTLY_READING and book.current_page == book.total_pages:
+            book.current_page = 0
+            
+        book.save()
+        
+        
+    return redirect("books:book_detail", pk=book.pk)
+    

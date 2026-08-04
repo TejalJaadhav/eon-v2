@@ -395,3 +395,20 @@ button:hover {
     margin: 4px 0;
     color: #4b5563;
 }
+
+.quick-status-actions form {
+    all: unset;
+    display: inline-block;
+    margin: 8px 0 20px;
+}
+
+.quick-status-actions button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: #1f2933;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}

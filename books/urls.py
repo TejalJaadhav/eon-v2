@@ -1,5 +1,12 @@
 from django.urls import path
-from books.views import BookListView, BookCreateView, BookDetailView, BookUpdateView, BookDeleteView
+from books.views.view_book import (
+     BookListView, 
+     BookCreateView, 
+     BookDetailView, 
+     BookUpdateView, 
+     BookDeleteView,
+     update_book_status,
+)
 from books.views.view_google_books import google_book_search, import_google_book
 
 app_name = "books"
@@ -34,6 +41,11 @@ urlpatterns = [
     path(
         "books/google-import/<str:google_book_id>/",
         import_google_book,
-        name="import_google_book",
+        name="import_google_book"
     ),
+    path(
+         "books/<int:pk>/status/", 
+         update_book_status, 
+         name="update_book_status"
+    )
 ]

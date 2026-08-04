@@ -8,4 +8,5 @@ __all__ = [
     "BookUpdateView",
     "BookDeleteView",
     "google_book_search",
+    "update_book_status",
 ]
