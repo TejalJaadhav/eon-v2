@@ -10,44 +10,9 @@
 </form>
 
 {% for book in results %}
-    <div class="google-book-result">
-        <div class="google-book-cover-wrap">
-        {% if book.thumbnail %}
-            <img class="google-book-cover" src="{{ book.thumbnail }}" alt="{{ book.title }} cover">
-        {% else %}
-            <div class="google-book-cover-placeholder">No cover</div>
-        {% endif %}
-    </div>
-
-        <div class="google-book-info">
-            <h2>{{ book.title }}</h2>
-            <p>by {{ book.authors|join:", " }}</p>
-            
-            <p>{{ book.page_count }} pages - {{ book.published_date }}</p>
-
-            {% if book.google_book_id in saved_google_book_ids %}
-                <p class="book-status-note">Already in library</p>
-            {% else %}
-                {% if book.has_similar_saved_title %}
-                    <p class="book-status-note similar-book-note">Similar book in library</p>
-                {% endif %}
-                
-                <form method="post" action="{% url 'books:import_google_book' book.google_book_id %}">
-                    {% csrf_token %}
-
-                    <select name="status">
-                        <option value="want_to_read">Want to read</option>
-                        <option value="currently_reading">Currently Reading</option>
-                        <option value="read">Read</option>
-                    </select>
-
-                    <button type="submit">Add to my library</button>
-                </form>
-            {% endif %}
-        </div>
-    </div>
+    {% include "books/partials/google_book_result.html" %}
 {% empty %}
-    {% if query %} 
+    {% if query %}
         <p>No results found.</p>
     {% endif %}
 {% endfor %}
