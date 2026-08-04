@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+import string
 
 
 GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes"
@@ -51,6 +52,24 @@ def normalize_google_book_item(item):
     
     return book_details_map
 
+def get_title_words(title):
+    """
+    Returns lowercase words from a title for similarity checks.
+    """
+    ignored_words = {"the", "a", "an", "and", "of", "to", "in", "for", "by"}
+    
+    # Creating translation table that turns punctuation to spaces.
+    punctuation_to_spaces = str.maketrans(
+        string.punctuation, 
+        " " * len(string.punctuation),
+    )
+    
+    cleaned_title = title.lower().translate(punctuation_to_spaces)
+    return {
+        word
+        for word in cleaned_title
+        if word not in ignored_words and len(word) > 2
+    }
 
 def get_google_book_by_id(google_book_id):
     """
@@ -67,5 +86,6 @@ def get_google_book_by_id(google_book_id):
     item = response.json() # Converting google's json to py dict
     
     return normalize_google_book_item(item)
+    
     
     

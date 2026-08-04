@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from books.models import Book
-from books.services.google_books import search_google_books, get_google_book_by_id
+from books.services.google_books import search_google_books, get_google_book_by_id, get_title_words
 
 def import_google_book(request, google_book_id):
     """
@@ -26,18 +26,6 @@ def import_google_book(request, google_book_id):
    )
     return redirect("books:book_detail", pk=book.pk) # Once saved, send the user to the saved book detail page.
 
-def get_title_words(title):
-    """
-    Returns lowercase words from a title for similarity checks.
-    """
-    ignored_words = {"the", "a", "an", "and", "of", "to", "in", "for", "by"}
-    
-    return {
-        word
-        for word in title.lower().replace(":", " ").replace(",", " ").split()
-        if word not in ignored_words and len(word) > 2
-    }
-    
 
 def google_book_search(request):
     query = request.GET.get("q", "").strip()
@@ -46,11 +34,14 @@ def google_book_search(request):
     if query:
         results = search_google_books(query)
         
-        saved_google_book_ids = set(
-            Book.objects.filter(
-                google_book_id__in = [book["google_book_id"] for book in results]
-            ).values_list("google_book_id", flat=True)
-        )
+        saved_books_by_google_id = {
+            saved_book.google_book_id: saved_book 
+            for saved_book in Book.objects.filter(
+                google_book_id__in=[book["google_book_id"] for book in results]
+            )
+        }
+        
+        saved_google_book_ids = set(saved_books_by_google_id.keys())
         
         saved_title_words = [
             get_title_words(title)
@@ -58,6 +49,7 @@ def google_book_search(request):
         ]
         
         for book in results:
+            book["saved_book"] = saved_books_by_google_id.get(book["google_book_id"])
             google_title_words = get_title_words(book["title"])
 
             book["has_similar_saved_title"] = (
