@@ -7,6 +7,7 @@ class BookForm(forms.ModelForm):
         fields = [
             "title",
             "author",
+            "published_date",
             "status",
             "total_pages",
             "current_page",
@@ -20,4 +21,16 @@ class BookForm(forms.ModelForm):
             "started_at": forms.DateInput(attrs={"type": "date"}),
             "finished_at": forms.DateInput(attrs={"type": "date"}),
             "notes": forms.Textarea(attrs={"rows":4}),
+        }
+        
+        labels = {
+            "published_date": "Published date",
+            "total_pages": "Total pages",
+            "current_page": "Current page",
+            "started_at": "Started reading",
+            "finished_at": "Finished reading",
+        }
+        
+        help_text = {
+            "published_date": "Use a year or full date, like 2018 or 2018-10-16.", 
         }

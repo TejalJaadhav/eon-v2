@@ -340,3 +340,11 @@ button:hover {
     background: #fff4d6;
     color: #8a5a00;
 }
+
+.helper-note {
+    color: #6b7280;
+}
+
+.helper-note a {
+    font-weight: 700;
+}

@@ -1,8 +1,10 @@
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from books.models import Book
-from books.forms import BookForm
 from django.urls import reverse_lazy
 from django.db.models import Q
+
+from books.models import Book
+from books.forms import BookForm
+from books.services.google_books import search_google_books
 
 class BookListView(ListView):
     model=Book
@@ -53,6 +55,11 @@ class BookListView(ListView):
         context["query"] = query
         context["status_choices"] = Book.STATUS_CHOICES
         context["selected_status"] = selected_status
+        
+        context["google_results"] = []
+        
+        if query and not books.exists():
+            context["google_results"] = search_google_books(query)
         
         return context
         

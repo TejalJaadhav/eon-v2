@@ -3,7 +3,12 @@
 {% block title %}Add Book - Eon{% endblock %}
 
 {% block content %}
-    <h2>Add Books</h2>
+    <h2>Add Book</h2>
+
+    <p class="helper-note">
+        Want to add a book faster?
+        <a href="{% url 'books:google_book_search' %}">Search Google Books</a>
+    </p>
 
     <form method="post">
         {% csrf_token %}
