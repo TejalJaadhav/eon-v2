@@ -1,0 +1,16 @@
+{% extends "books/base.html" %}
+
+{% block title %}Add Adaptation - Eon{% endblock %}
+
+{% block content %}
+    <h2>Add Adaptation</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Adaptation</button>
+    </form>
+
+    <p>
+        <a href="{% url 'books:book_detail' book.pk %}">Back to Book</a>
+{% endblock %}

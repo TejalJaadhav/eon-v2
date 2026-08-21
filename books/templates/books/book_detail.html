@@ -78,13 +78,13 @@
         <p>
             <strong>{{ adaptation.title }}</strong>
 
-            -  {{ adaptation.get_adaptation_type_display }}
+            -  {{ adaptation.get_media_type_display }}
 
             {% if adaptation.release_year %}
                 ({{ adaptation.release_year }})
             {% endif %}
 
-            -  {{ adaptation.get_watch_status_display }}
+            -  {{ adaptation.get_status_display }}
 
             {% if adaptation.rating %}
                 - {{ adaptation.rating }}/5

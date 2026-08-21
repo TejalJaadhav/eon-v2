@@ -2,40 +2,29 @@ from django.db import models
 from books.models import Book, BaseModel
 
 class Adaptation(BaseModel):
-    MOVIE = 'movie'
-    TV_SHOW = "tv_show"
-    
-    ADAPTATION_TYPE_CHOICES = [
-        (MOVIE, "movie"),
-        (TV_SHOW, "TV Show"),
-    ]
-    
-    WANT_TO_WATCH = "want_to_watch"
-    CURRENTLY_WATCHING = "currently_watching"
-    WATCHED = "watched"
-    
-    WATCH_STATUS_CHOICES = [
-        (WANT_TO_WATCH, "Want to watch"),
-        (CURRENTLY_WATCHING, "Currently watching"),
-        (WATCHED, "watched")
-    ]
-    
-    book = models.ForeignKey (
-        Book,
+    class MediaType(models.TextChoices):
+        MOVIE = "movie", "Movie"
+        TV_SHOW = "tv", "TV SHOW"
+        
+    class WatchStatus(models.TextChoices):
+        WANT_TO_WATCH = "want_to_watch", "Want to Watch"
+        CURRENTLY_WATCHING = "currently_watching", "Currently Watching"
+        WATCHED = "watched", "Watched"
+        
+    book = models.ForeignKey(
+        "books.Book",
         on_delete=models.CASCADE,
-        related_name="adaptations"
+        related_name="adaptations",
     )
     
     title = models.CharField(
         max_length=255,
-        null = False,
-        blank = False
     )
     
-    adaptation_type = models.CharField(
-        max_length=20,
-        choices=ADAPTATION_TYPE_CHOICES,
-        default=MOVIE,
+    media_type = models.CharField(
+        max_length=10,
+        choices=MediaType.choices,
+        default=MediaType.MOVIE,
     )
     
     release_year = models.PositiveIntegerField(
@@ -43,15 +32,13 @@ class Adaptation(BaseModel):
         blank=True
     )
     
-    watch_status = models.CharField (
-        max_length=20,
-        choices=WATCH_STATUS_CHOICES,
-        default=WANT_TO_WATCH
+    status = models.CharField(
+        max_length=30,
+        choices=WatchStatus.choices,
+        default=WatchStatus.WANT_TO_WATCH,
     )
     
-    rating = models.DecimalField(
-        max_digits=2,
-        decimal_places=1,
+    rating = models.PositiveSmallIntegerField(
         null=True,
         blank=True
     )
@@ -60,8 +47,24 @@ class Adaptation(BaseModel):
         blank=True
     )
     
-    class Meta:
-        ordering=["title"] # sorts adaptions by title.
+    external_id = models.CharField(
+        max_length=100,
+        blank=True,
+    )
     
+    source = models.CharField(
+        max_length=50,
+        blank=True,
+    )
+    
+    class Meta:
+        ordering = ["-release_year", "title"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["book", "title", "media_type", "release_year"],
+                name="unique_adaptation_per_book",
+            )
+        ]
+        
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.get_media_type_display()})"

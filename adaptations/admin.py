@@ -6,23 +6,24 @@ from adaptations.models import Adaptation
 
 @admin.register(Adaptation)
 class AdaptationAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "title",
         "book",
-        "adaptation_type",
+        "media_type",
         "release_year",
-        "watch_status",
-        "rating"
-    ]
+        "status",
+        "rating",
+        "source",
+    )
 
-
-    list_filter = [
-        "adaptation_type",
+    list_filter = (
+        "media_type",
         "release_year",
-        "watch_status"
-    ]
-    
-    search_fields = [
+        "status",
+        "source",
+    )
+
+    search_fields = (
         "title",
-        "book__title" # To search connected book title.
-    ]
+        "book__title",
+    )

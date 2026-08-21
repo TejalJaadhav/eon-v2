@@ -48,6 +48,7 @@ def normalize_google_book_item(item):
         "page_count": volume_info.get("pageCount"),
         "published_date": volume_info.get("publishedDate", ""),
         "thumbnail": thumbnail,
+        "description": volume_info.get("description", ""),
     }
     
     return book_details_map
@@ -65,9 +66,12 @@ def get_title_words(title):
     )
     
     cleaned_title = title.lower().translate(punctuation_to_spaces)
+    
+    words = cleaned_title.split()
+    
     return {
         word
-        for word in cleaned_title
+        for word in words
         if word not in ignored_words and len(word) > 2
     }
 
@@ -77,7 +81,7 @@ def get_google_book_by_id(google_book_id):
     """
     
     response = requests.get(
-        f"{GOOGLE_BOOKS_URL}/ {google_book_id}",
+        f"{GOOGLE_BOOKS_URL}/{google_book_id}",
         params={"key":settings.GOOGLE_BOOKS_API_KEY,},
         timeout=10,
     )

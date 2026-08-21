@@ -47,8 +47,17 @@ class Book(BaseModel):
         blank=True,
     )
     
+    original_publication_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+    )
+    
     published_date = models.CharField(
         max_length=20,
+        blank=True,
+    )
+    
+    description = models.TextField(
         blank=True,
     )
     

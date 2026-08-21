@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from books.models import Book
 from books.forms import BookForm
 from books.services.google_books import search_google_books
+from adaptations.services.service_adaptation import find_adaptations_for_book
 
 class BookListView(ListView):
     model=Book
@@ -88,6 +89,11 @@ class BookCreateView(CreateView):
     template_name = "books/book_form.html"
     success_url = reverse_lazy("books:book_list")
     
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        find_adaptations_for_book(self.object)
+        return response
+    
 class BookDetailView(DetailView):
     model = Book
     template_name = "books/book_detail.html"
@@ -130,4 +136,37 @@ def update_book_status(request, pk):
         
         
     return redirect("books:book_detail", pk=book.pk)
+
+@require_POST
+def upadte_book_progress(request, pk):
+    """
+    update ethe current page for one saved book.
+    """
+    
+    book = get_object_or_404(Book, pk=pk)
+    
+    current_page = request.POST.get("current_page")
+    
+    if current_page:
+        
+        current_page = int(current_page)
+        
+        if book.total_pages and current_page > book.total_pages:
+            current_page = book.total_pages
+            
+        book.current_page = current_page
+        
+        if current_page > 0 and book.status == book.WANT_TO_READ:
+            book.status = book.CURRENTLY_READING
+            
+        if book.total_pages and current_page == book.total_pages:
+            book.status = Book.READ
+            
+        book.save()
+        
+        
+    return redirect(
+        "books:book_detail", pk=book.pk
+    )
+    
     

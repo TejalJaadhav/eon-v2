@@ -6,6 +6,7 @@ from books.views.view_book import (
      BookUpdateView, 
      BookDeleteView,
      update_book_status,
+     upadte_book_progress,
 )
 from books.views.view_google_books import google_book_search, import_google_book
 
@@ -47,5 +48,10 @@ urlpatterns = [
          "books/<int:pk>/status/", 
          update_book_status, 
          name="update_book_status"
+    ),
+    path(
+         "booka/<int:pk>/progress/", 
+         upadte_book_progress, 
+         name="update_book_progress"
     )
 ]
