@@ -32,6 +32,7 @@
                 </option>
             {% endfor %}
         </select>
+        <button type="submit">Apply filters</button>
     </form>
 
     {% if query %}
@@ -40,7 +41,19 @@
             <a href="{% url 'books:book_list' %}">Clear</a>
         </p>
     {% endif %}
-   
+
+    {% if not books %}
+        <div class="empty-state">
+            {% if query or selected_status %}
+                <p>No books match your search or selected shelf.</p>
+                <a href="{% url 'books:book_list' %}">Show all books</a>
+            {% else %}
+                <p>Your library is ready for its first book.</p>
+                <a href="{% url 'books:book_create' %}">Add a book</a>
+                <p>You can also add books you’ve already finished.</p>
+            {% endif %}
+        </div>
+    {% endif %}
 
     {% if show_currently_reading %} 
         <section class="book-section">
@@ -88,7 +101,6 @@
                             </a>
 
                             <p>by {{ book.author }}</p>
-                            <p>{{ book.reading_progress_perc }}% complete</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -100,7 +112,7 @@
 
     {% if show_read_books %}
         <section class="book-section">
-            <h2>Read</h2>
+            <h2>Finished</h2>
             {% if read_books %}
                 {% for book in read_books %}
                     <div class="saved-book-row">
@@ -116,7 +128,13 @@
                             </a>
 
                             <p>by {{ book.author }}</p>
-                            <p>{{ book.reading_progress_perc }}% complete</p>
+                            <p>
+                                Finished{% if book.finished_at %} · {{ book.finished_at|date:"M j, Y" }}{% endif %}
+                            </p>
+
+                            {% if book.rating is not None %}
+                                <p>Rated {{ book.display_rating }} / 5</p>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

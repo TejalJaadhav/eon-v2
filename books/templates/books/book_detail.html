@@ -41,9 +41,34 @@
         {% endif %}
     </div>
 
+    {% if progress_error %}
+        <p role="alert">{{ progress_error }}</p>
+    {% endif %}
+
     {% if book.total_pages %}
         <p>Progress: {{ book.current_page }} / {{ book.total_pages }} pages</p>
         <p>{{ book.reading_progress_perc }}% complete</p>
+    {% endif %}
+
+    {% if book.status == book.CURRENTLY_READING %}
+        <form method="post"
+            action="{% url 'books:update_book_progress' book.pk %}">
+            {% csrf_token %}
+
+            <label for="current_page">Current page</label>
+            <input
+                type="number"
+                id="current_page"
+                name="current_page"
+                value="{{ book.current_page }}"
+                min="0"
+                {% if book.total_pages %}max="{{ book.total_pages }}"{% endif %}
+                step="1"
+                required
+            >
+
+            <button type="submit">Update progress</button>
+        </form>
     {% endif %}
 
     {% if book.display_rating %}

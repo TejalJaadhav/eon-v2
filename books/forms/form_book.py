@@ -2,6 +2,18 @@ from django import forms
 from books.models import Book
 
 class BookForm(forms.ModelForm):
+    
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if (
+            cleaned_data.get("status") == Book.READ
+            and cleaned_data.get("total_pages")
+        ):
+            cleaned_data["current_page"] = cleaned_data["total_pages"]
+
+        return cleaned_data
+    
     class Meta:
         model = Book
         fields = [
@@ -31,6 +43,8 @@ class BookForm(forms.ModelForm):
             "finished_at": "Finished reading",
         }
         
-        help_text = {
+        help_texts = {
             "published_date": "Use a year or full date, like 2018 or 2018-10-16.", 
         }
+    
+    

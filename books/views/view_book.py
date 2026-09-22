@@ -1,3 +1,7 @@
+from django import forms
+from django.core.exceptions import ValidationError
+from django.shortcuts import render
+
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -61,9 +65,6 @@ class BookListView(ListView):
         context["selected_status"] = selected_status
         
         context["google_results"] = []
-        
-        if query and not books.exists():
-            context["google_results"] = search_google_books(query)
         
         return context
         
@@ -139,34 +140,36 @@ def update_book_status(request, pk):
 
 @require_POST
 def upadte_book_progress(request, pk):
-    """
-    update ethe current page for one saved book.
-    """
-    
     book = get_object_or_404(Book, pk=pk)
-    
-    current_page = request.POST.get("current_page")
-    
-    if current_page:
-        
-        current_page = int(current_page)
-        
-        if book.total_pages and current_page > book.total_pages:
-            current_page = book.total_pages
-            
-        book.current_page = current_page
-        
-        if current_page > 0 and book.status == book.WANT_TO_READ:
-            book.status = book.CURRENTLY_READING
-            
-        if book.total_pages and current_page == book.total_pages:
-            book.status = Book.READ
-            
-        book.save()
-        
-        
-    return redirect(
-        "books:book_detail", pk=book.pk
+
+    page_field = forms.IntegerField(
+        min_value=0,
+        max_value=book.total_pages if book.total_pages else None,
+        required=True,
     )
-    
-    
+
+    try:
+        current_page = page_field.clean(
+            request.POST.get("current_page")
+        )
+    except ValidationError as error:
+        return render(
+            request,
+            "books/book_detail.html",
+            {
+                "book": book,
+                "progress_error": " ".join(error.messages),
+            },
+            status=400,
+        )
+
+    book.current_page = current_page
+
+    if book.total_pages and current_page == book.total_pages:
+        book.status = Book.READ
+    elif current_page > 0 or book.status == Book.READ:
+        book.status = Book.CURRENTLY_READING
+
+    book.save()
+
+    return redirect("books:book_detail", pk=book.pk)

@@ -18,7 +18,7 @@ class Book(BaseModel):
     STATUS_CHOICES = [
         (WANT_TO_READ, "want to read"),
         (CURRENTLY_READING, "currently reading"),
-        (READ, "read")
+        (READ, "Finished")
     ]
     
     # Book info
@@ -114,7 +114,7 @@ class Book(BaseModel):
                 "Current page cannot be greater than total pages"
             )
         
-        if self.rating and not 1 <= self.rating <= 5:
+        if self.rating is not None and not 1 <= self.rating <= 5:
             raise ValidationError(
                 "Rating must be between 1 and 5."
             )
