@@ -1,43 +1,78 @@
 from django.shortcuts import render, redirect
 
-from books.models import Book
+from django.db import transaction
+from django.http import HttpResponseBadRequest
+from django.views.decorators.http import require_POST
+
+
+from books.models import Book, ReadingRecord
 from books.services.google_books import search_google_books, get_google_book_by_id, get_title_words
 from books.services.open_library import find_original_publication_year
-from adaptations.services.service_adaptation import find_adaptations_for_book
 
+@require_POST
 def import_google_book(request, google_book_id):
-    """
-    Save one google book result into local book model.
-    """
-    
+    selected_status = request.POST.get(
+        "status", Book.WANT_TO_READ
+    )
+
+    valid_statuses = {
+        value for value, label in Book.STATUS_CHOICES
+    }
+    if selected_status not in valid_statuses:
+        return HttpResponseBadRequest("Invalid reading status.")
+
+    # Importing an existing book must not reset its reading history.
+    existing_book = Book.objects.filter(
+        google_book_id=google_book_id
+    ).first()
+
+    if existing_book:
+        return redirect("books:book_detail", pk=existing_book.pk)
+
     google_book = get_google_book_by_id(google_book_id)
-    selected_status = request.POST.get("status", Book.WANT_TO_READ)
     author_text = ", ".join(google_book["authors"])
-    
-    original_publication_year = find_original_publication_year (
+
+    original_year = find_original_publication_year(
         google_book["title"],
         author_text,
     )
-    
-    book, created = Book.objects.get_or_create(
-       google_book_id=google_book["google_book_id"],
-       defaults={
-           "title": google_book["title"],
-           "status": selected_status,
-           "author": author_text,
-           "total_pages": google_book["page_count"],
-           "published_date": google_book["published_date"],
-           "original_publication_date": original_publication_year,
-           "cover_url": google_book["thumbnail"],
-           "description": google_book["description"],
-        
-       }
-   )
-    
-    if created:
-        find_adaptations_for_book(book)
-        
-    return redirect("books:book_detail", pk=book.pk) # Once saved, send the user to the saved book detail page.
+
+    total_pages = google_book["page_count"] or None
+    current_page = (
+        total_pages or 0
+        if selected_status == Book.READ
+        else 0
+    )
+
+    with transaction.atomic():
+        book, created = Book.objects.get_or_create(
+            google_book_id=google_book["google_book_id"],
+            defaults={
+                "title": google_book["title"],
+                "status": selected_status,
+                "author": author_text,
+                "total_pages": total_pages,
+                "current_page": current_page,
+                "published_date": google_book["published_date"],
+                "original_publication_year": original_year,
+                "cover_url": google_book["thumbnail"],
+                "description": google_book["description"],
+            },
+        )
+
+        if created and selected_status in [
+            Book.CURRENTLY_READING,
+            Book.READ,
+        ]:
+            ReadingRecord.objects.create(
+                book=book,
+                current_page=current_page,
+                total_pages=total_pages,
+                is_finished=selected_status == Book.READ,
+            )
+
+    return redirect("books:book_detail", pk=book.pk)
+
 
 
 def google_book_search(request):

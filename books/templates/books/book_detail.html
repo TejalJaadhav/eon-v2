@@ -88,6 +88,39 @@
         <p>{{ book.notes }}</p>
     {% endif %}
 
+    <h3>Reading History</h3>
+
+    {% for record in book.reading_records.all %}
+        <section>
+            <p>
+                <strong>
+                    {% if record.is_finished %}
+                        Finished
+                    {% else %}
+                        In progress
+                    {% endif %}
+                </strong>
+            </p>
+
+            <p>
+                Progress: {{ record.current_page }}{% if record.total_pages %} / {{ record.total_pages }}{% endif %} pages
+            </p>
+
+            {% if record.started_at %}
+                <p>Started: {{ record.started_at|date:"M j, Y" }}</p>
+            {% endif %}
+
+            {% if record.finished_at %}
+                <p>Finished: {{ record.finished_at|date:"M j, Y" }}</p>
+            {% endif %}
+
+            {% if not record.started_at and not record.finished_at %}
+                <p>Reading dates not recorded.</p>
+            {% endif %}
+        </section>
+    {% empty %}
+        <p>No reading history yet.</p>
+    {% endfor %}
 
     {# Show this section title on the book detail page. #}
     <h3>Adaptations</h3>
